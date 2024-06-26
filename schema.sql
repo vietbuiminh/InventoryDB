@@ -3,7 +3,7 @@ DROP TABLE IF exists product;
 DROP TABLE IF exists stock;
 
 CREATE TABLE category (
-  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   category_name VARCHAR(255)
 );
 
