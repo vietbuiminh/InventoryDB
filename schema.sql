@@ -1,8 +1,8 @@
-DROP TABLE IF exists category;
+DROP TABLE IF exists categories;
 DROP TABLE IF exists product;
 DROP TABLE IF exists stock;
 
-CREATE TABLE category (
+CREATE TABLE categories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name VARCHAR(255),
   parent_id int(11) DEFAULT NULL,
@@ -18,6 +18,10 @@ CREATE TABLE category (
   datetime_added timestamp NOT NULL DEFAULT current_timestamp(),
   last_modified timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+INSERT INTO categories (name, parent_id, disable_footprints, disable_manufacturers, disable_autodatasheets, disable_properties, partname_regex, partname_hint, default_description, default_comment, comment, datetime_added, last_modified) VALUES
+('Test', NULL, 0, 0, 0, 0, '', '', '', '', '', '2023-01-07 18:32:29', '2023-01-07 18:32:29');
+
 
 CREATE TABLE product (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
