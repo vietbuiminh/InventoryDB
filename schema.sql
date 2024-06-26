@@ -4,10 +4,20 @@ DROP TABLE IF exists stock;
 
 CREATE TABLE category (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  category_name VARCHAR(255)
-);
-
-
+  name VARCHAR(255),
+  parent_id int(11) DEFAULT NULL,
+  disable_footprints tinyint(1) NOT NULL DEFAULT 0,
+  disable_manufacturers tinyint(1) NOT NULL DEFAULT 0,
+  disable_autodatasheets tinyint(1) NOT NULL DEFAULT 0,
+  disable_properties tinyint(1) NOT NULL DEFAULT 0,
+  partname_regex text COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
+  partname_hint text COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
+  default_description text COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
+  default_comment text COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
+  comment text COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  datetime_added timestamp NOT NULL DEFAULT current_timestamp(),
+  last_modified timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 CREATE TABLE product (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
