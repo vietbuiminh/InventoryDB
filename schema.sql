@@ -10,17 +10,16 @@ CREATE TABLE categories (
   disable_manufacturers tinyint(1) NOT NULL DEFAULT 0,
   disable_autodatasheets tinyint(1) NOT NULL DEFAULT 0,
   disable_properties tinyint(1) NOT NULL DEFAULT 0,
-  partname_regex text COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
-  partname_hint text COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
-  default_description text COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
-  default_comment text COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
-  comment text COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  partname_regex TEXT NOT NULL DEFAULT '',
+  partname_hint TEXT NOT NULL DEFAULT '',
+  default_description TEXT NOT NULL DEFAULT '',
+  default_comment TEXT NOT NULL DEFAULT '',
+  comment TEXT DEFAULT NULL,
   datetime_added timestamp NOT NULL DEFAULT current_timestamp(),
   last_modified timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+);
 
-INSERT INTO categories (name, parent_id, disable_footprints, disable_manufacturers, disable_autodatasheets, disable_properties, partname_regex, partname_hint, default_description, default_comment, comment, datetime_added, last_modified) VALUES
-('Test', NULL, 0, 0, 0, 0, '', '', '', '', '', '2023-01-07 18:32:29', '2023-01-07 18:32:29');
+-- INSERT INTO categories (name, parent_id, disable_footprints, disable_manufacturers, disable_autodatasheets, disable_properties, partname_regex, partname_hint, default_description, default_comment, comment, datetime_added, last_modified) VALUES ('Test', NULL, 0, 0, 0, 0, '', '', '', '', '', '2023-01-07 18:32:29', '2023-01-07 18:32:29');
 
 
 CREATE TABLE product (

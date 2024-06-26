@@ -13,7 +13,7 @@ def get_db_connection():
 @app.route('/')
 def index():
     conn = get_db_connection()
-    categories = conn.execute('SELECT * FROM category').fetchall()
+    categories = conn.execute('SELECT * FROM categories').fetchall()
     conn.close()
     return render_template('index.html', categories=categories)
 
