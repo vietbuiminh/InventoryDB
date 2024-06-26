@@ -7,6 +7,7 @@ with open('schema.sql') as f:
 
 cur = connection.cursor()
 
-cur.execute("INSERT INTO category (category_name) VALUES ('general')")
+category_id = cur.execute("SELECT id FROM category").fetchall()
+print(category_id)
 connection.commit()
 connection.close()
