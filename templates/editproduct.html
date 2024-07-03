@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Currently Edit {{title}}</h1>
+<form method="POST">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputName">Name</label>
+      <input type="text" 
+        class="form-control"
+        name="name" 
+        placeholder="{{ info['name'] }}" 
+        id="name" 
+        required=""
+        value="{{ request.form['name'] }}">
+      </input>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputText">Description</label>
+      <input type="text" 
+        class="form-control"
+        name="description" 
+        placeholder=" {{ info['description'] }}" 
+        id="description" 
+        required=""
+        value="{{ request.form['description'] }}">
+      </input>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputStock">In Stock</label>
+    <input type="number" 
+      class="form-control"
+      name="instock" 
+      placeholder=" {{ info['instock'] }}" 
+      id="instock" 
+      required=""
+      value="{{ request.form['instock'] }}">
+    </input>
+  </div>
+  <div class="form-group">
+    <label for="inputCategory">Category</label>
+    <select name="category" id="category" class="form-control">
+
+      <option selected> {{ info['id_category'] }}</option>
+      {% for category in categories %}
+        <option value="{{ category['id'] }}">{{ category['name'] }}</option>
+      {% endfor %}
+    </select> 
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputComment">Comment</label>
+      <input type="text" 
+        class="form-control"
+        name="comment" 
+        placeholder=" {{ info['comment'] }}" 
+        id="comment" 
+        required=""
+        value="{{ request.form['comment'] }}">
+      </input>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputVisible">Visibility</label>
+      <select name="visible" id="visible" class="form-control">
+        <option selected>Choose...</option>
+        <option value="1">Visible</option>
+        <option value="0">Hidden</option>
+      </select> 
+    </div>
+  </div>
+  <!-- <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="gridCheck">
+      <label class="form-check-label" for="gridCheck">
+        Check me out
+      </label>
+    </div>
+  </div> -->
+  <button type="submit" class="btn btn-primary">Add Product</button>
+</form>
+   
+    
+{% endblock %}

@@ -1,42 +1,37 @@
 DROP TABLE IF exists categories;
-DROP TABLE IF exists product;
-DROP TABLE IF exists stock;
+DROP TABLE IF exists products;
+DROP TABLE IF exists users;
 
 CREATE TABLE categories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name VARCHAR(255),
-  parent_id int(11) DEFAULT NULL,
-  disable_footprints tinyint(1) NOT NULL DEFAULT 0,
-  disable_manufacturers tinyint(1) NOT NULL DEFAULT 0,
-  disable_autodatasheets tinyint(1) NOT NULL DEFAULT 0,
-  disable_properties tinyint(1) NOT NULL DEFAULT 0,
-  partname_regex TEXT NOT NULL DEFAULT '',
-  partname_hint TEXT NOT NULL DEFAULT '',
-  default_description TEXT NOT NULL DEFAULT '',
-  default_comment TEXT NOT NULL DEFAULT '',
+  description TEXT NOT NULL DEFAULT '',
   comment TEXT DEFAULT NULL,
-  datetime_added timestamp NOT NULL DEFAULT current_timestamp(),
-  last_modified timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  datetime_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- INSERT INTO categories (name, parent_id, disable_footprints, disable_manufacturers, disable_autodatasheets, disable_properties, partname_regex, partname_hint, default_description, default_comment, comment, datetime_added, last_modified) VALUES ('Test', NULL, 0, 0, 0, 0, '', '', '', '', '', '2023-01-07 18:32:29', '2023-01-07 18:32:29');
-
-
-CREATE TABLE product (
+CREATE TABLE products (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  category_id int,
-  brand_name VARCHAR(255),
-  product_name VARCHAR(255),
-  product_description TEXT
+  id_category INTEGER NOT NULL DEFAULT 0,
+  name VARCHAR(255),
+  description TEXT NOT NULL DEFAULT '',
+  instock INTEGER NOT NULL DEFAULT 0,
+  comment TEXT NOT NULL DEFAULT '',
+  visible INT(1) NOT NULL,
+  datetime_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-DROP TABLE IF exists stock;
-
-CREATE TABLE stock (
+CREATE TABLE users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  product_id int,
-  zone VARCHAR(10),
-  level_number int,
-  quantity int DEFAULT 0,
-  attribute VARCHAR(255) DEFAULT 'N/A'
+  perms INT(1) NOT NULL DEFAULT 0,
+  first_name VARCHAR(255) NOT NULL DEFAULT '',
+  last_name VARCHAR(255) NOT NULL DEFAULT '',
+  email VARCHAR(255) NOT NULL DEFAULT '',
+  password VARCHAR(255) NOT NULL DEFAULT '',
+  secrete_question TEXT NOT NULL DEFAULT '',
+  secrete_answer TEXT NOT NULL DEFAULT ''
 );
+
+INSERT INTO users (perms, first_name, last_name, email, password, secrete_question, secrete_answer) VALUES (1, 'admin', 'admin', 'admin@localhost', 'admin', 'What is your favorite color?', 'black');

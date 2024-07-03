@@ -1,10 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Category {% endblock %}</h1>
-    {% for category in categories %}
-        <div class='post'>
-            <h2>{{ category['name']}}</h2>
-        </div>
-    {% endfor %}
+    <h1>{{title}}</h1>
+    <div id="toolbar">
+      <a href="/addproduct/"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i>Add item</button></a>
+    </div>
+   
+    <table 
+      id="main_table"
+       data-toggle="table">
+      <thead>
+        <tr>
+          <th>Item ID</th>
+          <th>Category</th>
+          <th>Name</th>
+            <th>Description</th>
+            <th>In Stock</th>
+            <th>Last Modified</th>
+            <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for product in products %}
+        <tr>
+          <td><a href="{{ url_for('displayInfo', id=product['id']) }}">{{ product['id'] }}</a></td>
+          <td>{{ categories[product['id_category']]['name'] }}</td>
+            <td>{{ product['name'] }}</td>
+            <td>{{ product['description'] }}</td>
+            <td>{{ product['instock'] }}</td>
+            <td>{{ product['last_modified'] }}</td>
+            <td>{{ product['comment'] }}</td>
+        </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    
 {% endblock %}

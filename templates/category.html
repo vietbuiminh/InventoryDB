@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 style="text-transform: capitalize">{{ title }}</h1>
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            {{ category_info['description'] }}
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <p>{{ category_info['comment'] }}</p>
+            <p>Added {{category_info['datetime_added']}}'</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="toolbar">
+      <a href="/addproduct/"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i>Add item</button></a>
+        <form method="post" class="mt-2" action="{{ url_for('deleteCategory', id=category_info['id']) }}">
+      <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="this will delete recursively all the items in this category"">
+        Delete
+      </button>
+          </form>
+    </div>
+   
+    <table 
+      id="main_table"
+       data-toggle="table">
+      <thead>
+        <tr>
+          <th>Item ID</th>
+          <th>Name</th>
+            <th>Description</th>
+            <th>In Stock</th>
+            <th>Last Modified</th>
+            <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for product in products %}
+        <tr>
+          <td><a href="{{ url_for('displayInfo', id=product['id']) }}">{{ product['id'] }}</a></td>
+            <td>{{ product['name'] }}</td>
+            <td>{{ product['description'] }}</td>
+            <td>{{ product['instock'] }}</td>
+            <td>{{ product['last_modified'] }}</td>
+            <td>{{ product['comment'] }}</td>
+        </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    
+{% endblock %}
