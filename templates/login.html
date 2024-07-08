@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{title}}</h1>
+<form method="POST">
+  <div class="form-row">
+    <div class="mb-3">
+      <label for="inputEmail" class="form-label">Email address</label>
+      <input type="email" 
+        class="form-control"
+        name="email" 
+        placeholder="email" 
+        id="name" 
+        required=""
+        value="{{ request.form['email'] }}">
+      </input>
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+    <div class="mb-3">
+      <label for="inputPassword" class="form-label">Password</label>
+      <input type="password" 
+        class="form-control"
+        name="password"  
+        id="password" 
+        required=""
+        value="{{ request.form['password'] }}">
+      </input>
+    </div>
+  </div>
+  <!-- <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="gridCheck">
+      <label class="form-check-label" for="gridCheck">
+        Check me out
+      </label>
+    </div>
+  </div> -->
+  <button type="submit" class="btn btn-primary">Log In</button>
+</form>
+   
+    
+{% endblock %}

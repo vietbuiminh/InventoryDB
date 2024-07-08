@@ -44,7 +44,7 @@ Detail info for part <b>"{{ info['name'] }}"</b>
                                   <small></small>
               </h5>
   <h3 class="w-fit" data-bs-original-title="Name">{{ info['name'] }}
-                                  <a href="{{ url_for('editProduct', id=info['id']) }}"><i class="fas fa-fw fa-sm fa-edit"></i></a>
+                                  <a href="{{ url_for('editProduct', id=info['id']) }}">Edit</a>
               </h3>
   <h6 class="text-muted w-fit" data-bs-original-title="Description"><span><div class="markdown markdown-inline" data-controller="common--markdown"><p>{{ info['description']}}</p>
 </div></span></h6>
@@ -212,7 +212,7 @@ Detail info for part <b>"{{ info['name'] }}"</b>
           <td>
                                                       <ul class="structural_link d-inline">
                       <li>
-                                      <a href="/en/store_location/9/parts">Haribo IC-Dose II</a>
+                                      <a href="/en/store_location/9/parts">Shop</a>
                               </li>
               </ul>
 
@@ -226,13 +226,13 @@ Detail info for part <b>"{{ info['name'] }}"</b>
           </td>
           <td>
               <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#withdraw-modal" data-action="withdraw" data-lot-id="199" data-lot-amount="5" aria-label="Withdraw parts from lot" data-bs-original-title="Withdraw parts from lot">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#withdraw-modal" data-action="withdraw" data-lot-id="199" data-lot-amount="{{ info['instock']}}" aria-label="Withdraw parts from lot" data-bs-original-title="Withdraw parts from lot">
                       <i class="fa-solid fa-minus fa-fw"></i>
                   </button>
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#withdraw-modal" data-action="add" data-lot-id="199" data-lot-amount="5" aria-label="Add parts to lot" data-bs-original-title="Add parts to lot">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#withdraw-modal" data-action="add" data-lot-id="199" data-lot-amount="{{ info['instock']}}" aria-label="Add parts to lot" data-bs-original-title="Add parts to lot">
                       <i class="fa-solid fa-plus fa-fw"></i>
                   </button>
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#withdraw-modal" data-action="move" data-lot-id="199" data-lot-amount="5" disabled="" aria-label="Move parts from lot to another lot" data-bs-original-title="Move parts from lot to another lot">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#withdraw-modal" data-action="move" data-lot-id="199" data-lot-amount="{{ info['instock']}}" disabled="" aria-label="Move parts from lot to another lot" data-bs-original-title="Move parts from lot to another lot">
                       <i class="fa-solid fa-right-left fa-fw"></i>
                   </button>
               </div>
@@ -257,15 +257,9 @@ Detail info for part <b>"{{ info['name'] }}"</b>
                       <i class="fa-solid fa-lightbulb fa-fw"></i>
                   </button>
                   <div class="dropdown-menu">
-                      <span class="text-muted dropdown-item-text"><i class="fas fa-lightbulb fa-fw"></i> <b>ID:</b> 199</span>
-                      <span class="text-muted dropdown-item-text"><i class="fas fa-history fa-fw"></i> <b>Last modified:</b>                 9/2/19, 5:58:56 PM
-
-
-</span>
-                      <span class="text-muted dropdown-item-text"><i class="fas fa-calendar-plus fa-fw"></i> <b>Created At:</b>                 9/2/19, 5:58:56 PM
-
-
-</span>
+                      <span class="text-muted dropdown-item-text"><i class="fas fa-lightbulb fa-fw"></i> <b>ID:</b>{{ info['id']}}</span>
+                      <span class="text-muted dropdown-item-text"><i class="fas fa-history fa-fw"></i> <b>Last modified:</b>{{ info['last_modified']}}</span>
+                      <span class="text-muted dropdown-item-text"><i class="fas fa-calendar-plus fa-fw"></i> <b>Created At:</b>{{ info['datetime_added']}}</span>
                                               </div>
               </div>
           </td>

@@ -1,8 +1,28 @@
 import sqlite3
-from flask import Flask, render_template, request, url_for, flash, redirect
+import re
+from flask import Flask, render_template, request, url_for, flash, redirect, abort, session
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+from models import User
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = 'SolarPodInventoryForKeepTracking'
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM users WHERE id = ?',
+                        (user_id, )).fetchone()
+    conn.close()
+    if user is None:
+        abort(404)
+    else:
+        return User(user['id'], user['perms'], user['first_name'],
+                    user['last_name'], user['email'], user['password'],
+                    user['secrete_question'], user['secrete_answer'])
 
 
 def get_db_connection():
@@ -40,6 +60,24 @@ def get_category(id):
     return category
 
 
+def retrieveALLUsers():
+    conn = get_db_connection()
+    cursor = conn.execute("SELECT * FROM users")
+    users = cursor.fetchall()
+    conn.close()
+    return users
+
+
+def retrieveUser(id):
+    conn = get_db_connection()
+    user = conn.execute("SELECT * FROM coaches WHERE id = ?",
+                        (id, )).fetchone()
+    conn.close()
+    if user is None:
+        abort(404)
+    return user
+
+
 @app.route('/')
 def index():
     conn = get_db_connection()
@@ -71,6 +109,57 @@ def add_category(name, description, comment):
         (name, description, comment))
     conn.commit()
     conn.close()
+
+
+def checkExisting(email, password, users):
+    for user in users:
+        if user['email'] == email:
+            if user['password'] == password:
+                return True, user['coach_id']
+        else:
+            return False, 0
+    return False, 0
+
+
+def checkValidEmail(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    if (re.fullmatch(regex, email)):
+        return True
+    else:
+        return False
+
+
+def checkExistingEmail(email, users):
+    for user in users:
+        if user['email'] == email:
+            return True
+    return False
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+    users = retrieveALLUsers()
+    try:
+        if request.method == 'POST':
+            email = request.form['email']
+            password = request.form['password']
+            # users = retrieveALLUsers()
+            checkBool, id = checkExisting(email, password, users)
+            if (checkBool is False and id == 0):
+                pass
+            # if True:
+            # flash('Wrong password or username', 'error')
+            else:
+                user = load_user(id)
+                login_user(user, remember=True)
+                return redirect(url_for('profile'))
+
+        return render_template('login.html', title="Login")
+    except Exception as e:
+        # flash(e, 'error')
+        return render_template('login.html', title="Login")
 
 
 @app.route('/addcategory/', methods=('GET', 'POST'))
@@ -148,6 +237,7 @@ def displayInfo(id):
 @app.route('/productinfo/<int:id>/edit', methods=('GET', 'POST'))
 def editProduct(id):
     info = get_product_info(id)
+
     return render_template('editproduct.html',
                            info=info,
                            categories=get_categories_ls())
