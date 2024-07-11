@@ -101,6 +101,20 @@ def add_product(id_category, name, description, instock, comment, visible):
     conn.close()
 
 
+def delete_product(id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM products WHERE id = ?", (id, ))
+    conn.commit()
+
+
+def delete_category(id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM categories WHERE id = ?", (id, ))
+    conn.commit()
+
+
 def add_category(name, description, comment):
     conn = get_db_connection()
     cur = conn.cursor()
@@ -115,7 +129,7 @@ def checkExisting(email, password, users):
     for user in users:
         if user['email'] == email:
             if user['password'] == password:
-                return True, user['coach_id']
+                return True, user['id']
         else:
             return False, 0
     return False, 0
@@ -139,27 +153,34 @@ def checkExistingEmail(email, users):
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('profile'))
+        return redirect(url_for('index'))
     users = retrieveALLUsers()
     try:
         if request.method == 'POST':
             email = request.form['email']
             password = request.form['password']
-            # users = retrieveALLUsers()
+            print(email, password)
+            users = retrieveALLUsers()
             checkBool, id = checkExisting(email, password, users)
-            if (checkBool is False and id == 0):
+            if (checkBool is False):
                 pass
             # if True:
             # flash('Wrong password or username', 'error')
             else:
                 user = load_user(id)
                 login_user(user, remember=True)
-                return redirect(url_for('profile'))
+                print("Sucessful to login")
+                return redirect(url_for('index'))
 
-        return render_template('login.html', title="Login")
+        return render_template('login.html',
+                               title="Login",
+                               categories=get_categories_ls())
     except Exception as e:
         # flash(e, 'error')
-        return render_template('login.html', title="Login")
+        print('Error', e)
+        return render_template('login.html',
+                               title="Login",
+                               categories=get_categories_ls())
 
 
 @app.route('/addcategory/', methods=('GET', 'POST'))
@@ -198,6 +219,11 @@ def addproduct():
                            title="Add Product",
                            categories=get_categories_ls())
 
+@app.route('/addproject/')
+def addproject():
+    return render_template('addproject.html',
+                           title="Add Project", 
+                           categories=get_categories_ls())
 
 @app.route('/category/<int:id>/', methods=('GET', 'POST'))
 def category(id):
@@ -216,13 +242,12 @@ def category(id):
 
 @app.route('/category/<int:id>/delete', methods=('POST', ))
 def deleteCategory(id):
-    if request.method == 'POST':
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute("DELETE FROM products WHERE id_category = ?", (int(id), ))
-        cur.execute("DELETE FROM categories WHERE id = ?", (int(id), ))
-        conn.commit()
-        conn.close()
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM products WHERE id_category = ?", (int(id), ))
+    cur.execute("DELETE FROM categories WHERE id = ?", (int(id), ))
+    conn.commit()
+    conn.close()
     return redirect(url_for('index'))
 
 

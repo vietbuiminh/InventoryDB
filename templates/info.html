@@ -2,71 +2,62 @@
 
 {% block content %}
 <div class="card border-primary">
-  <div class="card-header 
-      bg-primary text-white
-
-">
-      <i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>
-Detail info for part <b>"{{ info['name'] }}"</b>
-      <div class="float-end">ID: {{ info['id'] }}</div>
-  </div>
-      <div class="card-body">
-      <div class="row">
-  <div class="col-md-9">
+    <div class="card-header bg-primary text-white">
+        <i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>
+        Detail info for part <b>"{{ info['name'] }}"</b>
+    <div class="float-end">ID: {{ info['id'] }}</div>
+</div>
+    <div class="card-body">
+    <div class="row">
+<div class="col-md-9">
 
 <div class="row">
-<div class="col-md-3 col-lg-4 col-3 mt-auto mb-auto">
-
-<div id="pictureCarousel" class="carousel slide mb-2" data-bs-interval="false" data-bs-ride="false">
-  <div class="carousel-indicators">
-                      <button type="button" data-bs-target="#pictureCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Footprint"></button>
-              </div>
-  <div class="carousel-inner">
-                                      <div class="carousel-item  active">
-              <a href="/img/footprints/Active/ICs/DIP/IC_DIP18.png" data-turbo="false" target="_blank" rel="noopener">
-                  <img class="d-block w-100 img-fluid img-thumbnail bg-light part-info-image" src="/img/footprints/Active/ICs/DIP/IC_DIP18.png" alt="">
-                  <div class="mask"></div>
-                  <div class="carousel-caption-hover">
-                      <div class="carousel-caption text-white">
-                          <div><b>Footprint</b></div>
-                          <div>(IC_DIP18.png) </div>
-                          <div>Footprint</div>
-                      </div>
-                  </div>
-              </a>
-          </div>
-              </div>
-      </div>
-
-</div>
-<div class="col-md-9 col-lg-8 col-7">
-  <h5 class="text-muted pt-2" title="Manufacturer">
-                                  <small></small>
-              </h5>
-  <h3 class="w-fit" data-bs-original-title="Name">{{ info['name'] }}
-                                  <a href="{{ url_for('editProduct', id=info['id']) }}">Edit</a>
-              </h3>
-  <h6 class="text-muted w-fit" data-bs-original-title="Description"><span><div class="markdown markdown-inline" data-controller="common--markdown"><p>{{ info['description']}}</p>
-</div></span></h6>
-  <h6 class="">
-      <i class="fas fa-tag fa-fw" aria-label="Category" data-bs-original-title="Category"></i>
-      <span class="text-muted">                <ul class="structural_link d-inline">
-                      <li>
-                                      <a href="/category/1/">{{ categories[info['id_category']]['name'] }}</a>
-                              </li>
-              </ul>
-</span>
-  </h6>
-  <h6><i class="fas fa-shapes fa-fw"></i>
-      <span class="text-muted">
-                                                  <span data-bs-original-title="Instock">{{info['instock']}}</span>
-                                          /
-          <span data-bs-original-title="Minimum Instock">0</span>
-      </span>
+    <div class="col-md-3 col-lg-4 col-3 mt-auto mb-auto">
+        <div id="pictureCarousel" class="carousel slide mb-2" data-bs-interval="false" data-bs-ride="false">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#pictureCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Footprint"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item  active">
+                    <a href="/img/footprints/Active/ICs/DIP/IC_DIP18.png" data-turbo="false" target="_blank" rel="noopener">
+                        <img class="d-block w-100 img-fluid img-thumbnail bg-light part-info-image" src="/img/footprints/Active/ICs/DIP/IC_DIP18.png" alt="">
+                        <div class="mask"></div>
+                        <div class="carousel-caption-hover">
+                            <div class="carousel-caption text-white">
+                                <div><b>Footprint</b></div>
+                                <div>(IC_DIP18.png) </div>
+                                <div>Footprint</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 col-lg-8 col-7">
+        <h5 class="text-muted pt-2" title="Manufacturer">
+            <small></small>
+        </h5>
+        <h3 class="w-fit" data-bs-original-title="Name">{{ info['name'] }}
+            <a href="{{ url_for('editProduct', id=info['id']) }}">Edit</a>
+        </h3>
+        <h6 class="text-muted w-fit" data-bs-original-title="Description"><span><div class="markdown markdown-inline" data-controller="common--markdown">
+            <p>{{ info['description']}}</p>
+        </div></span></h6>
+        <h6 class="">
+        <i class="fas fa-tag fa-fw" aria-label="Category" data-bs-original-title="Category"></i>
+        <span class="text-muted"><ul class="structural_link d-inline">
+            <li><a href="/category/1/">{{ categories[info['id_category']]['name'] }}</a></li>
+        </ul>
+        </span>
+        </h6>
+        <h6><i class="fas fa-shapes fa-fw"></i>
+            <span class="text-muted"><span data-bs-original-title="Instock">{{info['instock']}}</span>/<span data-bs-original-title="Minimum Instock">0</span></span>
               </h6>
 
-                                              </div>
-</div>        </div>
+        </div>
+    </div>        
+</div>
 
   <div class="col-md-3 offset-md-0 col-9 offset-3">
 

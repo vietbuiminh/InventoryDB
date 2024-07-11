@@ -19,11 +19,10 @@
     </div>
     <div id="toolbar">
       <a href="/addproduct/"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i>Add item</button></a>
-        <form method="post" class="mt-2" action="{{ url_for('deleteCategory', id=category_info['id']) }}">
-      <button type="button" class="btn btn-outline-danger" data-toggle="tooltip" data-placement="top" title="this will delete recursively all the items in this category"">
-        Delete
-      </button>
-          </form>
+      <form action="{{ url_for('deleteCategory', id=category_info['id']) }}" method="POST">
+          <input type="submit" value="Delete Category"
+                  onclick="return confirm('this will delete recursively all the items in this category')">
+      </form>
     </div>
    
     <table 
