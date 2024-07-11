@@ -1,6 +1,7 @@
 DROP TABLE IF exists categories;
 DROP TABLE IF exists products;
 DROP TABLE IF exists users;
+DROP TABLE IF exists media;
 
 CREATE TABLE categories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,6 +33,12 @@ CREATE TABLE users (
   password VARCHAR(255) NOT NULL DEFAULT '',
   secrete_question TEXT NOT NULL DEFAULT '',
   secrete_answer TEXT NOT NULL DEFAULT ''
+);
+
+CREATE TABLE media (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  href VARCHAR(255) NOT NULL DEFAULT '',
+  comment TEXT NOT NULL DEFAULT ''
 );
 
 INSERT INTO users (perms, first_name, last_name, email, password, secrete_question, secrete_answer) VALUES (1, 'admin', 'admin', 'admin@localhost', 'admin', 'What is your favorite color?', 'black');

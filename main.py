@@ -41,6 +41,15 @@ def get_categories_ls():
     conn.close()
     return categories
 
+def get_product_ls():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT p.id AS id, p.name AS name, p.description AS description, p.instock AS instock, p.comment AS comment, p.visible AS visible, c.id AS id_category, c.name AS name_category, c.description AS description_category, c.comment AS comment_category FROM products p LEFT JOIN categories c ON p.id_category = c.id"
+    )
+    products = cur.fetchall()
+    conn.close()
+    return products
 
 def get_product_info(id):
     conn = get_db_connection()
@@ -223,6 +232,7 @@ def addproduct():
 def addproject():
     return render_template('addproject.html',
                            title="Add Project", 
+                           products=get_product_ls(),
                            categories=get_categories_ls())
 
 @app.route('/category/<int:id>/', methods=('GET', 'POST'))

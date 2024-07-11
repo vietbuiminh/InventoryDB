@@ -18,12 +18,53 @@
         </ul>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="paste-tab-pane" role="tabpanel" aria-labelledby="paste-tab" tabindex="0">
-              <div class="input-group p-3">
-                <span class="input-group-text">Paste Text Here</span>
-                <input type="text" aria-label="pasteText" class="form-control">
-              </div>
+              <form method="POST" action="/textprocessbom">
+                  <div class="input-group p-1">
+                      <span class="input-group-text">Paste Text Here</span>
+                      <input type="text" 
+                          aria-label="pasteText" 
+                          class="form-control"
+                          name="pasteText"
+                          required=""
+                          value="{{ request.form['pasteText'] }}">
+                    </div>
+                  <button type="submit" class="btn btn-primary p-1">Update Inventory</button>
+              </form>
+              
           </div>
-          <div class="tab-pane fade" id="manual-tab-pane" role="tabpanel" aria-labelledby="manual-tab" tabindex="0">...</div>
+          <div class="tab-pane fade" id="manual-tab-pane" role="tabpanel" aria-labelledby="manual-tab" tabindex="0">
+              <form method="POST" action="/updateinventory">
+                  <table 
+                    id="main_table"
+                     data-toggle="table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Qty.</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                      <tr>
+                          
+                        <td><a href="{{ url_for('displayInfo', id=product['id']) }}">{{ product['id'] }}</a></td>
+                          <td>{{ product['name'] }}</td>
+                          <td><input type="number" 
+                            class="form-control"
+                            name="instock" 
+                            placeholder="0" 
+                            id="instock" 
+                            required=""
+                            value="{{ request.form['number'] }}">
+                          </input></td>
+                      </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+                  <button type="submit" class="btn btn-primary p-1">Update Inventory</button>
+              </form>
+          </div>
         </div>
     </div>
 </div>
