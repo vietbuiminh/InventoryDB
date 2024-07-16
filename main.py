@@ -4,6 +4,8 @@ from flask import Flask, render_template, request, url_for, flash, redirect, abo
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from models import User
 from werkzeug.security import generate_password_hash, check_password_hash
+from processtext import processPasteBOM
+import numpy as np
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = 'SolarPodInventoryForKeepTracking'
@@ -31,6 +33,24 @@ def get_db_connection():
     return conn
 
 
+def get_group_ls():
+    id_ls = []
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, name, list FROM groups ORDER BY name")
+    group_ls = cur.fetchall()
+    try:
+        for group in group_ls:
+            product_ls = [int(ele) for ele in group['list'].split(',')]
+            print(product_ls)
+            id_ls.append(product_ls)
+    except Exception as e:
+        print(e)
+        print('List has no elements or not an integer list')
+    conn.close()
+    return group_ls, id_ls
+
+
 def get_categories_ls():
     conn = get_db_connection()
     cur = conn.cursor()
@@ -41,15 +61,17 @@ def get_categories_ls():
     conn.close()
     return categories
 
+
 def get_product_ls():
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(
-        "SELECT p.id AS id, p.name AS name, p.description AS description, p.instock AS instock, p.comment AS comment, p.visible AS visible, c.id AS id_category, c.name AS name_category, c.description AS description_category, c.comment AS comment_category FROM products p LEFT JOIN categories c ON p.id_category = c.id"
+        "SELECT p.id AS id, p.name AS name, p.description AS description, p.instock AS instock, p.comment AS comment, p.visible AS visible, p.last_modified AS last_modified, c.id AS id_category, c.name AS name_category, c.description AS description_category, c.comment AS comment_category, m.href AS link FROM products p LEFT JOIN categories c ON p.id_category = c.id LEFT JOIN media m ON p.id_media = m.id"
     )
     products = cur.fetchall()
     conn.close()
     return products
+
 
 def get_product_info(id):
     conn = get_db_connection()
@@ -86,25 +108,27 @@ def retrieveUser(id):
         abort(404)
     return user
 
-
 @app.route('/')
 def index():
     conn = get_db_connection()
     categories = get_categories_ls()
-    products = conn.execute('SELECT * FROM products').fetchall()
+    products = get_product_ls()
+    groups, groups_id_ls = get_group_ls()
     conn.close()
     return render_template('index.html',
                            title="Home",
                            categories=categories,
-                           products=products)
+                           products=products,
+                           groups=groups,
+                           groups_id_ls=groups_id_ls)
 
 
 def add_product(id_category, name, description, instock, comment, visible):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute(
-        "INSERT INTO products (id_category, name, description, instock, comment, visible) VALUES (?,?,?,?,?,?)",
-        (int(id_category), name, description, int(instock), comment,
+        "INSERT INTO products (id_category, id_media, name, description, instock, comment, visible) VALUES (?,?,?,?,?,?,?)",
+        (int(id_category), 6, name, description, int(instock), comment,
          int(visible)))
     conn.commit()
     conn.close()
@@ -228,12 +252,14 @@ def addproduct():
                            title="Add Product",
                            categories=get_categories_ls())
 
+
 @app.route('/addproject/')
 def addproject():
     return render_template('addproject.html',
-                           title="Add Project", 
+                           title="Add Project",
                            products=get_product_ls(),
                            categories=get_categories_ls())
+
 
 @app.route('/category/<int:id>/', methods=('GET', 'POST'))
 def category(id):
@@ -287,6 +313,24 @@ def deleteProduct(id):
         conn.commit()
         conn.close()
     return redirect(url_for('index'))
+
+
+@app.route('/addproject/previewproject/', methods=('POST', 'GET'))
+def previewproject():
+    text = request.args.get('text')
+    df = processPasteBOM(text)
+    for index, row in df.iterrows():
+        print(row['Bill of Materials'], row['qty'])
+    return render_template('previewproject.html',
+                           title="Preview BOM",
+                           data=df,
+                           categories=get_categories_ls())
+
+
+@app.route('/textprocessbom/', methods=('POST', 'GET'))
+def textprocessbom():
+    text = request.form['pastetext']
+    return redirect(url_for('previewproject', text=text))
 
 
 if __name__ == '__main__':

@@ -41,7 +41,7 @@
       <tbody>
           {% for product in products %}
         <tr>
-          <td><a href="{{ url_for('displayInfo', id=product['id']) }}">{{ product['id'] }}</a></td>
+          <td><a href="{{ url_for('displayInfo', id=product['id']) }}">{{ product['id'] }}<img class="img-thumbnail force-small float-right" src="{{ url_for('static', filename=product['link'])}}"></a></td>
             <td>{{ product['name'] }}</td>
             <td>{{ product['description'] }}</td>
             <td>{{ product['instock'] }}</td>

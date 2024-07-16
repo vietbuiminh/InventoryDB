@@ -16,28 +16,56 @@ def run_sql(sql, val):
 def get_id(sql, val):
   return int(cur.execute(sql, val).fetchone()[0])
 
+
 def insert_media(href, comment):
   sql = "INSERT INTO media (href, comment) VALUES (?, ?)"
   val = (href, comment)
   run_sql(sql, val)
+
+
+for filename in os.listdir("static/img"):
+  if filename.endswith((".jpg", ".jpeg", ".png", ".gif")):
+    href = f"/img/{filename}"
+    comment = "Image from static/img folder"
+    insert_media(href, comment)
 
 run_sql(
     "INSERT INTO categories (name, description, comment) VALUES (?,?,?)",
     ('hardware', 'Hardware related products', 'This is a hardware category'))
 run_sql("INSERT INTO categories (name, description, comment) VALUES (?,?,?)",
         ('racking', 'Racking related products', 'This is a racking category'))
+
 hardware_id = get_id("SELECT id FROM categories WHERE name = ?",
                      ('hardware', ))
 racking_id = get_id("SELECT id FROM categories WHERE name = ?", ('racking', ))
-run_sql(
-    "INSERT INTO products (id_category, name, description, instock, comment, visible) VALUES (?,?,?,?,?,?)",
-    (hardware_id, '8/3 bolt', 'Hardware related products', 1000,
-     'This is a hardware category', 1))
+print(hardware_id, racking_id)
 
-for filename in os.listdir("static/img"):
-    if filename.endswith((".jpg", ".jpeg", ".png", ".gif")):
-        href = f"/static/img/{filename}"
-        comment = "Image from static/img folder"
-        insert_media(href, comment)
+run_sql(
+    "INSERT INTO products (id_category, id_media, name, description, instock, comment, visible) VALUES (?,?,?,?,?,?,?)",
+    (hardware_id, 1, '8/3 nut', 'Hardware related products', 1000,
+     'This is a hardware category', 1))
+run_sql(
+    "INSERT INTO products (id_category, id_media, name, description, instock, comment, visible) VALUES (?,?,?,?,?,?,?)",
+    (hardware_id, 2, '8/3 bolt', 'Hardware related products', 500,
+     'This is a hardware category', 1))
+run_sql(
+    "INSERT INTO products (id_category, id_media, name, description, instock, comment, visible) VALUES (?,?,?,?,?,?,?)",
+    (hardware_id, 3, 'Spring Nut', 'Hardware related products', 800,
+     'This is a hardware category', 1))
+run_sql(
+    "INSERT INTO products (id_category, id_media, name, description, instock, comment, visible) VALUES (?,?,?,?,?,?,?)",
+    (hardware_id, 4, 'Washer', 'Hardware related products', 1200,
+     'This is a hardware category', 1))
+run_sql(
+    "INSERT INTO products (id_category, id_media, name, description, instock, comment, visible) VALUES (?,?,?,?,?,?,?)",
+    (int(racking_id), 5, '19ft Strut', 'Racking related products', 800,
+     'This is a racking product', 1))
+run_sql(
+    "INSERT INTO products (id_category, id_media, name, description, instock, comment, visible) VALUES (?,?,?,?,?,?,?)",
+    (int(hardware_id), 6, 'Split Ring', 'Hardware related products', 800,
+     'This is a hardware product', 1))
+
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)",
+        ('3/8 Hardware', '2,3,6'))
 
 conn.close()

@@ -2,3 +2,7 @@
   padding-left: 10px;
   padding-right: 10px;
 }
+.force-small {
+  max-height: 25px !important;
+  width: auto !important;
+}

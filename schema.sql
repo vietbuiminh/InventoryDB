@@ -2,6 +2,7 @@ DROP TABLE IF exists categories;
 DROP TABLE IF exists products;
 DROP TABLE IF exists users;
 DROP TABLE IF exists media;
+DROP TABLE IF exists groups;
 
 CREATE TABLE categories (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,6 +16,7 @@ CREATE TABLE categories (
 CREATE TABLE products (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_category INTEGER NOT NULL DEFAULT 0,
+  id_media INTEGER NOT NULL DEFAULT 0,
   name VARCHAR(255),
   description TEXT NOT NULL DEFAULT '',
   instock INTEGER NOT NULL DEFAULT 0,
@@ -39,6 +41,12 @@ CREATE TABLE media (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   href VARCHAR(255) NOT NULL DEFAULT '',
   comment TEXT NOT NULL DEFAULT ''
+);
+
+CREATE TABLE groups (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name varchar(225) NOT NULL DEFAULT '',
+  list varchar(255) NOT NULL default ''
 );
 
 INSERT INTO users (perms, first_name, last_name, email, password, secrete_question, secrete_answer) VALUES (1, 'admin', 'admin', 'admin@localhost', 'admin', 'What is your favorite color?', 'black');

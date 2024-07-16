@@ -55,9 +55,9 @@
     <div class="container-fluid">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
-        <h3 style="padding-top: 20px;">Categories</h3>
+        <h3 style="padding-top: 20px;"><i class="fa fa-book fa-fw" aria-hidden="true"></i>Categories</h3>
         <div id="toolbar">
-          <a href="/addcategory/"><button type="button" class="btn btn-primary"><i class="fa fa-plus"></i>Add category</button></a>
+          <a href="/addcategory/"><button type="button" class="btn btn-primary"><i class="fa fa-plus"></i>New Category</button></a>
         </div>
         <ol class="list-group list-group-numbered">
           {% for category in categories %}
@@ -89,6 +89,38 @@
           </li>
           {% endfor %}
         </ol>
+
+        <h4 style="padding-top: 20px;"><i class="fa fa-object-group fa-fw" aria-hidden="true"></i>Groups</h4>
+        <div id="toolbar">
+          <a href="/addcategory/"><button type="button" class="btn btn-primary"><i class="fa fa-plus"></i>New Group</button></a>
+        </div>
+        <ol class="list-group list-group-numbered">
+          {% for group in groups %}
+          {% if title==group['name'] %}
+          <li class="list-group-item d-flex justify-content-between align-items-start bg-primary text-light">
+          {% else %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+              {% endif %}
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">
+                {% if title==group['name'] %}
+                <a class="link-light" href="">{{ group['name']}}</a>
+                {% else %}
+                <a href="">{{ group['name']}}</a>
+                {% endif %}
+              </div>
+              {% set id_group = groups_id_ls[loop.index-1] %}
+              {% for id_no in id_group %}
+              {% set link_name = products[id_no-1]['link'] %}
+              <a href="{{ url_for('displayInfo', id=id_no) }}"><img class="img-thumbnail force-small float-right" src="{{ url_for('static', filename=link_name)}}"></a>
+              {% endfor %}
+            </div>
+              
+
+          </li>
+          {% endfor %}
+        </ol>
+      
       </div>
     
       <div class="col py-3 content">

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card border-primary">
+    <div class="card-header bg-primary text-white">
+        <i class="fa fa-plus-circle fa-fw" aria-hidden="true"></i>
+        Preview BOM</b>
+</div>
+    <div class="card-body">
+    <p>Please review and made necessary adjustment.</p>
+
+    <p>It works!</p>
+        <form method="POST" action="/updateinventory">
+              <table 
+                id="main_table"
+                 data-toggle="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Qty.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                   {% for index, row in data.iterrows() %}
+                    <tr>
+                        <td>{{ row['Bill of Materials'] }}</td>
+                        <td>{{ row['qty'] }}</td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            <a href="">
+              <button type="submit" class="btn btn-primary p-1">Update Inventory</button>
+              </a>
+          </form>
+    </div>
+</div>
+
+{% endblock %}

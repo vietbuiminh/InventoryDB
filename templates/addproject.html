@@ -18,19 +18,21 @@
         </ul>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="paste-tab-pane" role="tabpanel" aria-labelledby="paste-tab" tabindex="0">
-              <form method="POST" action="/textprocessbom">
+              <form method="POST" action="{{ url_for('textprocessbom')}}">
                   <div class="input-group p-1">
                       <span class="input-group-text">Paste Text Here</span>
-                      <input type="text" 
+                      <textarea type="text" 
                           aria-label="pasteText" 
                           class="form-control"
-                          name="pasteText"
+                          name="pastetext"
                           required=""
-                          value="{{ request.form['pasteText'] }}">
+                          value="{{ request.form['pastetext'] }}"></textarea>
                     </div>
+                <a href="{{url_for('textprocessbom')}}">
                   <button type="submit" class="btn btn-primary p-1">Update Inventory</button>
+                </a>
               </form>
-              
+
           </div>
           <div class="tab-pane fade" id="manual-tab-pane" role="tabpanel" aria-labelledby="manual-tab" tabindex="0">
               <form method="POST" action="/updateinventory">
@@ -47,8 +49,8 @@
                     <tbody>
                         {% for product in products %}
                       <tr>
-                          
-                        <td><a href="{{ url_for('displayInfo', id=product['id']) }}">{{ product['id'] }}</a></td>
+
+                        <td><a href="{{ url_for('displayInfo', id=product['id']) }}">{{ product['id'] }}<img class="img-thumbnail force-small float-right" src="{{ url_for('static', filename=product['link'])}}"></a></td>
                           <td>{{ product['name'] }}</td>
                           <td><input type="number" 
                             class="form-control"
@@ -62,7 +64,9 @@
                         {% endfor %}
                     </tbody>
                   </table>
+                <a href="">
                   <button type="submit" class="btn btn-primary p-1">Update Inventory</button>
+                  </a>
               </form>
           </div>
         </div>
