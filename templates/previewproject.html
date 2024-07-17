@@ -10,7 +10,7 @@
     <p>Please review and made necessary adjustment.</p>
 
     <p>It works!</p>
-        <form method="POST" action="/updateinventory">
+        <form method="POST">
               <table 
                 id="main_table"
                  data-toggle="table">
@@ -22,11 +22,14 @@
                 </thead>
                 <tbody>
                    {% for index, row in data.iterrows() %}
+                    {% if index in ls_recognize %}
                     <tr>
                         <td>{{ row['Bill of Materials'] }}</td>
                         <td>{{ row['qty'] }}</td>
                       </tr>
+                    {% endif %}
                     {% endfor %}
+                    
                 </tbody>
               </table>
             <a href="">

@@ -3,41 +3,38 @@ import os
 
 conn = sqlite3.connect('database.db')
 with open('schema.sql') as f:
-  conn.executescript(f.read())
+    conn.executescript(f.read())
 
 cur = conn.cursor()
 
 
 def run_sql(sql, val):
-  cur.execute(sql, val)
-  conn.commit()
+    cur.execute(sql, val)
+    conn.commit()
 
 
 def get_id(sql, val):
-  return int(cur.execute(sql, val).fetchone()[0])
+    return int(cur.execute(sql, val).fetchone()[0])
 
 
 def insert_media(href, comment):
-  sql = "INSERT INTO media (href, comment) VALUES (?, ?)"
-  val = (href, comment)
-  run_sql(sql, val)
+    sql = "INSERT INTO media (href, comment) VALUES (?, ?)"
+    val = (href, comment)
+    run_sql(sql, val)
 
 
 for filename in os.listdir("static/img"):
-  if filename.endswith((".jpg", ".jpeg", ".png", ".gif")):
-    href = f"/img/{filename}"
-    comment = "Image from static/img folder"
-    insert_media(href, comment)
+    if filename.endswith((".jpg", ".jpeg", ".png", ".gif")):
+        href = f"/img/{filename}"
+        comment = "Image from static/img folder"
+        insert_media(href, comment)
 
-run_sql(
-    "INSERT INTO categories (name, description, comment) VALUES (?,?,?)",
-    ('hardware', 'Hardware related products', 'This is a hardware category'))
 run_sql("INSERT INTO categories (name, description, comment) VALUES (?,?,?)",
-        ('racking', 'Racking related products', 'This is a racking category'))
+        ('Racking', 'Racking related products', 'This is a racking category'))
 
 hardware_id = get_id("SELECT id FROM categories WHERE name = ?",
-                     ('hardware', ))
-racking_id = get_id("SELECT id FROM categories WHERE name = ?", ('racking', ))
+                     ('Hardware', ))
+racking_id = get_id("SELECT id FROM categories WHERE name = ?", ('Racking', ))
 print(hardware_id, racking_id)
 
 run_sql(
@@ -66,6 +63,21 @@ run_sql(
      'This is a hardware product', 1))
 
 run_sql("INSERT INTO groups (name,list) VALUES (?,?)",
-        ('3/8 Hardware', '2,3,6'))
+        ('3/8" Hardware ', '2,3,6'))
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)",
+        ('End Clamp (30mm)', ''))
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)", ('Mid Clamp ', ''))
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)",
+        ('Bonded Mid Clamp ', ''))
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)",
+        ('Ridge Brackets (twisted both sides)', ''))
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)",
+        ('Ridge Brackets (straight, both sides)', ''))
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)",
+        ('3/8" Hardware (ridge bracket centers)', ''))
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)",
+        ('3/8" Hardware (long)', ''))
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)", ("Rail (19')*", '5'))
+run_sql("INSERT INTO groups (name,list) VALUES (?,?)", ("Splice ", '5'))
 
 conn.close()

@@ -53,6 +53,21 @@
         </div>
       </nav>
     <div class="container-fluid">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% if error %}
+        <div class="alert alert-danger">{{error}}</div>
+      {% endif %}
+
+      {% if msg %}
+        <div class="alert alert-success">{{msg}}</div>
+      {% endif %}
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0">
         <h3 style="padding-top: 20px;"><i class="fa fa-book fa-fw" aria-hidden="true"></i>Categories</h3>
@@ -92,7 +107,7 @@
 
         <h4 style="padding-top: 20px;"><i class="fa fa-object-group fa-fw" aria-hidden="true"></i>Groups</h4>
         <div id="toolbar">
-          <a href="/addcategory/"><button type="button" class="btn btn-primary"><i class="fa fa-plus"></i>New Group</button></a>
+          <a href="/addcategory/"><button type="button" class="btn btn-dark"><i class="fa fa-plus"></i>New Group</button></a>
         </div>
         <ol class="list-group list-group-numbered">
           {% for group in groups %}

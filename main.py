@@ -1,11 +1,12 @@
 import sqlite3
 import re
-from flask import Flask, render_template, request, url_for, flash, redirect, abort, session
+from flask import Flask, render_template, request, url_for, flash, redirect, abort, session, get_flashed_messages
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from processtext import processPasteBOM
 import numpy as np
+from thefuzz import fuzz
 
 app = Flask(__name__, static_url_path='/static')
 app.config['SECRET_KEY'] = 'SolarPodInventoryForKeepTracking'
@@ -47,6 +48,8 @@ def get_group_ls():
     except Exception as e:
         print(e)
         print('List has no elements or not an integer list')
+        if group_ls[0] == '':
+            id_ls.append([])
     conn.close()
     return group_ls, id_ls
 
@@ -108,8 +111,11 @@ def retrieveUser(id):
         abort(404)
     return user
 
+
 @app.route('/')
 def index():
+    flash("Test1", 'primary')
+    get_flashed_messages()
     conn = get_db_connection()
     categories = get_categories_ls()
     products = get_product_ls()
@@ -315,15 +321,73 @@ def deleteProduct(id):
     return redirect(url_for('index'))
 
 
+def get_instock_product(id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM products WHERE id = ?", (id, ))
+    product = cur.fetchone()
+    conn.close()
+    return int(product['instock'])
+
+
+def bom_update_product(id, subtract):
+    if get_instock_product(id) < subtract:
+        return False
+    else:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("UPDATE products SET instock = instock - ? WHERE id = ?",
+                    (subtract, id))
+        conn.commit()
+        return True
+
+
 @app.route('/addproject/previewproject/', methods=('POST', 'GET'))
 def previewproject():
+    get_flashed_messages()
+    groups, groups_id_ls = get_group_ls()
     text = request.args.get('text')
     df = processPasteBOM(text)
+    ls_recognize = []
+    recognize_group_id = []
+    qty_ls = []
     for index, row in df.iterrows():
-        print(row['Bill of Materials'], row['qty'])
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT id FROM groups WHERE name LIKE ?",
+                    (row['Bill of Materials'], ))
+        recognize_id = cur.fetchone()
+        conn.close()
+        if recognize_id != None:
+            ls_recognize.append(index)
+            recognize_group_id.append(recognize_id[0])
+            qty_ls.append(row['qty'])
+    if request.method == 'POST':
+        for index, id in enumerate(recognize_group_id):
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT list FROM groups WHERE id = ?", (id, ))
+            list_id = cur.fetchone()
+            product_ls = [int(ele) for ele in list_id[0].split(',')]
+            for product_id in product_ls:
+                check = bom_update_product(product_id, int(qty_ls[index]))
+                if check == False:
+                    flash(
+                        'Please update inventory stock, not enough to update for BOM',
+                        'danger')
+                    return redirect(url_for('index'))
+
+            flash('BOM updated successfully', 'success')
+            print(product_ls)
+            conn.close()
+        return redirect(url_for('index'))
     return render_template('previewproject.html',
                            title="Preview BOM",
+                           products=get_product_ls(),
+                           groups=groups,
+                           groups_id_ls=groups_id_ls,
                            data=df,
+                           ls_recognize=ls_recognize,
                            categories=get_categories_ls())
 
 

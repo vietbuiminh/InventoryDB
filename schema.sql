@@ -13,11 +13,37 @@ CREATE TABLE categories (
   last_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO categories (id, name, description, comment) VALUES (
+  1,
+  'Solar',
+  'Solar products and PV technologies',
+  'modules, panels, batteries, solar panels, solar roof, solar shade, etc.'
+);
+INSERT INTO categories (id, name, description, comment) VALUES (
+  2,
+  'Electrical',
+  'Electrical products and equipment',
+  'wiring, cables, power supplies, battery, etc.'
+);
+INSERT INTO categories (id, name, description, comment) VALUES (
+  3,
+  'Building',
+  'Building products and equipment',
+  'roof, shade, etc.'
+);
+INSERT INTO categories (id, name, description, comment) VALUES (
+  4,
+  'Hardware',
+  'Hardware products and equipment',
+  ''
+);
+
 CREATE TABLE products (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   id_category INTEGER NOT NULL DEFAULT 0,
   id_media INTEGER NOT NULL DEFAULT 0,
   name VARCHAR(255),
+  brand VARCHAR(30),
   description TEXT NOT NULL DEFAULT '',
   instock INTEGER NOT NULL DEFAULT 0,
   comment TEXT NOT NULL DEFAULT '',
